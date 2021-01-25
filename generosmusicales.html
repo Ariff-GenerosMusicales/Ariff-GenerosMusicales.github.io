@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="css/estilos.css">
   </head>
   <body>
-    <nav id="MNAv"></nav>
+    <nav id="mnAv"></nav>
     <header>
       <h1>GenerosMusicales</h1>
       <a href="generomusicalNuevo.html">Agregar…</a>
@@ -44,7 +44,7 @@
       async function protege() {
         try {
           const usuarioAutorizado = await ctrlSesión.protege("GenerosMusicales");
-          miNav.protege(usuarioAutorizado.privilegios);
+          mnAv.protege(usuarioAutorizado.privilegios);
           ctrlPasatiempos.consulta(muestraError, muestraGenerosMusicales);
         } catch (error) {
           muestraError(error)
