@@ -19,7 +19,7 @@
   </head>
   <body>
     <form id="forma">
-      <nav id="MNAv"></nav>
+      <nav id="mnAv"></nav>
       <header>
         <a href="generosmusicales.html">Cancelar</a>
         <h1>GeneroMusical Nuevo</h1>
@@ -41,7 +41,7 @@
       async function protege() {
         try {
           const usuarioAutorizado = await ctrlSesión.protege("GenerosMusicales");
-          miNav.protege(usuarioAutorizado.privilegios);
+          mnAv.protege(usuarioAutorizado.privilegios);
           forma.addEventListener("submit", guarda);
         } catch (error) {
           muestraError(error)
