@@ -7,6 +7,5 @@ firebase.initializeApp({
     projectId: "ariffgmusicales",
     storageBucket: "ariffgmusicales.appspot.com",
     messagingSenderId: "158817079085",
-    appId: "1:158817079085:web:de3650f0f067b72bd20da4",
-    measurementId: "G-0WET71Q31K"
+    appId: "1:158817079085:web:de3650f0f067b72bd20da4"
     });
