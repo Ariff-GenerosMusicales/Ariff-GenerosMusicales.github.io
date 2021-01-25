@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuario</title>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.24.0/firebase-firestore.js"></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.24.0/firebase-storage.js"></script>
+    <script src="js/init.js"></script>
+    <script type="module" src="cmp/nav.js"></script>
+    <script type="module" src="cmp/footer.js"></script>
+    <script type="module" src="cmp/process.js"></script>
+    <link rel="stylesheet" href="css/estilos.css">
+  </head>
+  <body>
+    <form id="forma">
+      <nav id="MNAv"></nav>
+      <header>
+        <a href="usuarios.html">Cancelar</a>
+        <h1><output name="cue">Usuario <process></process></output></h1>
+        <button type="submit">Guardar</button>
+        <button id="eliminar" type="button">Eliminar</button>
+      </header>
+      <figure id="figure"><img id="img" alt="Falta el Avatar"></figure>
+      <p>
+        <label>
+          Avatar
+          <input name="avatar" type="file" accept=".png,.jpg,.jpeg,.gif">
+        </label>
+      </p><p>
+        <label>
+          GeneroMusical
+          <select name="generomusical">
+            <option>Cargando…</option>
+          </select>
+        </label>
+      </p>
+      <fieldset>
+        <legend>Privilegios</legend>
+        <ul id="privilegios" class="checks">
+          <li>
+            <process></process>
+          </li>
+        </ul>
+      </fieldset>
+    </form>
+    <footer></footer>
+    <script type="module">
+      import { muestraError } from "./lib/util.js";
+      import { Factory } from "./js/Factory.js";
+      import { InfoGeneroMusicalo } from "./js/InfoGeneroMusical.js";
+      import { InfoPrivilegio } from "./js/InfoPrivilegio.js";
+      import { InfoUsuario } from "./js/InfoUsuario.js";
+      import { muestraSesión, muestraUsuarios } from "./js/navegacion.js";
+
+      const ctrlSesión = Factory.instancia.ctrlSesión;
+      const ctrlUsuarios = Factory.instancia.ctrlUsuarios;
+      const foráneas = Factory.instancia.foráneasDeUsuarios;
+
+      const params = new URL(location.href).searchParams;
+      const id = params.get("id");
+
+      protege();
+      async function protege() {
+        try {
+          const usuarioAutorizado = await ctrlSesión.protege("Usuarios");
+          miNav.protege(usuarioAutorizado.privilegios);
+          busca();
+        } catch (error) {
+          muestraError(error)
+          muestraSesión();
+        }
+      }
+
+      async function busca() {
+        try {
+          const modelo = await ctrlUsuarios.busca(id);
+          if (modelo) {
+            forma.cue.value = id;
+            ctrlUsuarios.
+              foráneas(muestraError, muestraGenerosMusicales, muestraPrivilegios);
+            forma.addEventListener("submit", guarda);
+            eliminar.addEventListener("click", elimina);
+            img.src = modelo.urlDeAvatar;
+          }
+
+          function muestraGenerosMusicales(generosmusicales) {
+            const generomusicalId = modelo.generomusical ? modelo.generomusical.id : "";
+            foráneas.muestraGenerosMusicales(forma.generomusical, generomusicalId,
+              pasatiempos);
+          }
+
+          function muestraPrivilegios(privs) {
+            const privilegioIds = modelo.privilegios.map(p => p.nombre);
+            foráneas.muestraPrivilegios(privilegios, privilegioIds, privs);
+          }
+        } catch (e) {
+          muestraError(e);
+          muestraUsuarios();
+        }
+      }
+
+      async function guarda(evt) {
+        try {
+          evt.preventDefault();
+          const data = new FormData(forma);
+          const generomusical = new InfoGeneroMusical({
+            id: data.get("generomusical"),
+            nombre: null
+          });
+          const privilegios = data.getAll("privilegios").
+            map(id => new InfoPrivilegio({
+              nombre: id,
+              descripción: null
+            }));
+          const modelo = new InfoUsuario({
+            email: id,
+            avatar: data.get("avatar"),
+            urlDeAvatar: null,
+            generomusical,
+            privilegios
+          });
+          await ctrlUsuarios.modifica(modelo);
+          muestraUsuarios();
+        } catch (error) {
+          muestraError(error);
+        }
+      }
+
+      async function elimina() {
+        try {
+          if (confirm("Confirmar la eliminación")) {
+            await ctrlUsuarios.elimina(id);
+            muestraUsuarios();
+          }
+        } catch (e) {
+          muestraError(e);
+        }
+      }
+    </script>
+  </body>
+</html>
