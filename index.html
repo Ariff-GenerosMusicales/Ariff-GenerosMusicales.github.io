@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesión</title>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.24.0/firebase-firestore.js"></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.24.0/firebase-storage.js"></script>
+    <script src="js/init.js"></script>
+    <script type="module" src="cmp/nav.js"></script>
+    <script type="module" src="cmp/footer.js"></script>
+    <script type="module" src="cmp/process.js"></script>
+    <link rel="stylesheet" href="css/estilos.css">
+  </head>
+  <body>
+    <nav id="MNAv"></nav>
+    <header>
+      <h1>Sesión</h1>
+      <button id=terminarSesión type="button">Salir de la Sesión</button>
+    </header>
+    <figure><img id=avatar src="" alt=Avatar></figure>
+    <p>
+      <label>
+        Email
+        <output id=email>
+          <process></process>
+        </output>
+      </label>
+    </p>
+    <p>
+      <label>
+        Nombre
+        <output id=nombre>
+          <process></process>
+        </output>
+      </label>
+    </p>
+    <footer></footer>
+    <script type="module">
+      import { Fábrica } from "./js/Factory.js";
+      import { muestraError } from "./lib/util.js";
+
+      const ctrlSesión = Fábrica.instancia.ctrlSesión;
+      terminarSesión.addEventListener("click",
+        () => ctrlSesión.terminaSesión());
+
+      protege();
+      async function protege() {
+        try {
+          const usuarioAutorizado = await ctrlSesión.protege("");
+          miNav.protege(usuarioAutorizado.privilegios);
+          email.value = usuarioAutorizado.email;
+          nombre.value = usuarioAutorizado.nombre;
+          avatar.src = usuarioAutorizado.urlFoto;
+        } catch (error) {
+          muestraError(error)
+        }
+      }
+    </script>
+  </body>
+</html>
