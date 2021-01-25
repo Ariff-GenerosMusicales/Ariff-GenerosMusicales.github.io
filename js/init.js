@@ -2,10 +2,11 @@
  * configuración en tu servidor de Firebase. */
 // @ts-ignore
 firebase.initializeApp({
-    apiKey: "AIzaSyDN0DXykdXzlVGDe1U2WWp6rZQl2psCLdI",
-    authDomain: "rmrbdx1.firebaseapp.com",
-    projectId: "rmrbdx1",
-    storageBucket: "rmrbdx1.appspot.com",
-    messagingSenderId: "542459306880",
-    appId: "1:542459306880:web:6e64de1f33602cfc579765"
+    apiKey: "AIzaSyAFPBHll5zJwfh6LTFulzlUVhKb4zQEKM0",
+    authDomain: "ariffgmusicales.firebaseapp.com",
+    projectId: "ariffgmusicales",
+    storageBucket: "ariffgmusicales.appspot.com",
+    messagingSenderId: "158817079085",
+    appId: "1:158817079085:web:de3650f0f067b72bd20da4",
+    measurementId: "G-0WET71Q31K"
     });
