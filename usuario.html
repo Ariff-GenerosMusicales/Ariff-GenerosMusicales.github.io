@@ -20,7 +20,7 @@
   </head>
   <body>
     <form id="forma">
-      <nav id="MNAv"></nav>
+      <nav id="mnAv"></nav>
       <header>
         <a href="usuarios.html">Cancelar</a>
         <h1><output name="cue">Usuario <process></process></output></h1>
@@ -70,7 +70,7 @@
       async function protege() {
         try {
           const usuarioAutorizado = await ctrlSesión.protege("Usuarios");
-          miNav.protege(usuarioAutorizado.privilegios);
+          mnAv.protege(usuarioAutorizado.privilegios);
           busca();
         } catch (error) {
           muestraError(error)
@@ -93,7 +93,7 @@
           function muestraGenerosMusicales(generosmusicales) {
             const generomusicalId = modelo.generomusical ? modelo.generomusical.id : "";
             foráneas.muestraGenerosMusicales(forma.generomusical, generomusicalId,
-              pasatiempos);
+              generosmusicales);
           }
 
           function muestraPrivilegios(privs) {
