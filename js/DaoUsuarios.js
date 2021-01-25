@@ -2,15 +2,15 @@ import { DaoAbc } from "../lib/DaoAbc.js";
 import { paraTodos } from "../lib/util.js";
 import { DaoGenerosMusicales } from "./DaoGenerosMusicales.js";
 import { DaoPrivilegios } from "./DaoPrivilegios.js";
-import { DaoAlmacen } from "./DaoAlmacen.js";
+import { DaoStorage } from "./DaoStorage.js";
 import { InfoUsuario } from "./InfoUsuario.js";
 
 export class DaoUsuarios {
-  constructor(firestore, daoPasatiempos, daoPrivilegios, daoStorage) {
+  constructor(firestore, daoGenerosMusicales, daoPrivilegios, daoStorage) {
     this._colección = firestore.collection("USUARIO");
     this._daoGenerosMusicales = daoGenerosMusicales;
     this._daoPrivilegios = daoPrivilegios;
-    this._daoAlmacen = daoAlmacen;
+    this._daoStorage = daoStorage;
   }
   async _cargaUsuario(doc) {
     if (doc.exists) {
@@ -18,8 +18,8 @@ export class DaoUsuarios {
       return new InfoUsuario({
         email: doc.id,
         avatar: null,
-        urlDeAvatar: await this._daoAlmacen.url(doc.id),
-        GeneroMusical: await this._daoGenerosMusicales.busca(data.PAS_ID),
+        urlDeAvatar: await this._daoStorage.url(doc.id),
+        generomusical: await this._daoGenerosMusicales.busca(data.PAS_ID),
         privilegios: await this._daoPrivilegios.buscaMuchos(data.PRIV_IDS)
       });
     } else {
@@ -41,11 +41,11 @@ export class DaoUsuarios {
   }
   async _modificaInterno(modelo) {
     await this._colección.doc(modelo.email).set({
-      PAS_ID: modelo.GeneroMusical ? (modelo.GeneroMusical.id || null) : "",
+      PAS_ID: modelo.generomusical ? (modelo.generomusical.id || null) : "",
       PRIV_IDS: modelo.privilegios.map(p => p.nombre)
     });
     if (modelo.avatar && modelo.avatar.size > 0) {
-      await this._daoAlmacen.sube(modelo.email, modelo.avatar);
+      await this._daoStorage.sube(modelo.email, modelo.avatar);
     }
   }
   async agrega(modelo) {
@@ -58,6 +58,6 @@ export class DaoUsuarios {
   }
   async elimina(id) {
     await this._colección.doc(id).delete();
-    await this._daoAlmacen.elimina(id);
+    await this._daoStorage.elimina(id);
   }
 }
