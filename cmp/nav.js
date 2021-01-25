@@ -12,7 +12,7 @@ class MNav extends HTMLElement {
   protege(privilegios) {
     let html = "";
     if (privilegios.has("GenerosMusicales")) {
-      html += /* html */ `<li><a href="pasatiempos.html">GenerosMusicales</a></li>`;
+      html += /* html */ `<li><a href="generosmusicales.html">GenerosMusicales</a></li>`;
     }
     if (privilegios.has("Usuarios")) {
       html += /* html */ `<li><a href="usuarios.html">Usuarios</a></li>`;
