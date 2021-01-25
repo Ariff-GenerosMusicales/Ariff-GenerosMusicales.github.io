@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenerosMusicales</title>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.24.0/firebase-firestore.js"></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.24.0/firebase-storage.js"></script>
+    <script src="js/init.js"></script>
+    <script type="module" src="cmp/nav.js"></script>
+    <script type="module" src="cmp/footer.js"></script>
+    <script type="module" src="cmp/process.js"></script>
+    <link rel="stylesheet" href="css/estilos.css">
+  </head>
+  <body>
+    <nav id="MNAv"></nav>
+    <header>
+      <h1>GenerosMusicales</h1>
+      <a href="generomusicalNuevo.html">Agregar…</a>
+    </header>
+    <ul id="lista" class="lista">
+      <li>
+        <process></process>
+      </li>
+    </ul>
+    <footer></footer>
+    <script type="module">
+      import { Factory } from "./js/Factory.js";
+      import { cod, muestraError } from "./lib/util.js";
+      import { InfoGeneroMusical } from "./js/InfoGeneroMusical.js";
+      import { InfoUsuario } from "./js/InfoUsuario.js";
+      import { muestraSesión } from "./js/navegacion.js";
+
+      const ctrlSesión = Factory.instancia.ctrlSesión;
+      const ctrlGenerosMusicales = Factory.instancia.ctrlGenerosMusicales;
+
+      protege();
+      async function protege() {
+        try {
+          const usuarioAutorizado = await ctrlSesión.protege("GenerosMusicales");
+          miNav.protege(usuarioAutorizado.privilegios);
+          ctrlPasatiempos.consulta(muestraError, muestraGenerosMusicales);
+        } catch (error) {
+          muestraError(error)
+          muestraSesión();
+        }
+      }
+
+      function muestraGenerosMusicales(generosmusicales) {
+        lista.innerHTML = generosmusicales.map(p => {
+          const parámetros = new URLSearchParams();
+          parámetros.append("id", p.id);
+          return (
+            `<li>
+              <a href="generomusical.html?${parámetros}"><strong>${cod(p.nombre)}</strong></a>
+            </li>`);
+        }).join("");
+      }
+    </script>
+  </body>
+</html>
