@@ -43,9 +43,26 @@
     </p>
     <footer></footer>
     <script type="module">
-      
+      import { Factory } from "./js/Factory.js";
+      import { muestraError } from "./lib/util.js";
+
+      const ctrlSesión = Factory.instancia.ctrlSesión;
+      terminarSesión.addEventListener("click",
+        () => ctrlSesión.terminaSesión());
+
+      protege();
+      async function protege() {
+        try {
+          const usuarioAutorizado = await ctrlSesión.protege("");
+          mnAv.protege(usuarioAutorizado.privilegios);
+          email.value = usuarioAutorizado.email;
+          nombre.value = usuarioAutorizado.nombre;
+          avatar.src = usuarioAutorizado.urlFoto;
+        } catch (error) {
+          muestraError(error)
         }
       }
     </script>
   </body>
 </html>
+
