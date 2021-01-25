@@ -54,7 +54,7 @@
       async function protege() {
         try {
           const usuarioAutorizado = await ctrlSesión.protege("");
-          miNav.protege(usuarioAutorizado.privilegios);
+          MNAv.protege(usuarioAutorizado.privilegios);
           email.value = usuarioAutorizado.email;
           nombre.value = usuarioAutorizado.nombre;
           avatar.src = usuarioAutorizado.urlFoto;
