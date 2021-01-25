@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hola</title>
+    <link href="css/estilos.css" rel="stylesheet">
+    <script type="module" src="cmp/footer.js"></script>
+  </head>
+  <body>
+    <form id="formHola">
+      <h1>Hola</h1>
+      <p>
+        <label>
+          Nombre
+          <input type="text" name="nombre">
+        </label>
+      </p>
+      <p><button>Ingresar</button></p>
+      <p><output name="salida"></output></p>
+    </form>
+    <mi-footer></mi-footer>
+    <script type="module">
+      import { CtrlHola } from "/js/CtrlHola.js";
+      const ctrlHola = new CtrlHola();
+      formHola.addEventListener("submit", evt => {
+        try {
+          evt.preventDefault();
+          const datos = new FormData(formHola);
+          const nombre = datos.get("nombre");
+          const hola = ctrlHola.calculaHola(nombre);
+          formHola.salida.value = hola;
+        } catch (error) {
+          console.log(error);
+          formHola.salida.value = error.message;
+        }
+      });
+    </script>
+  </body>
+</html>
