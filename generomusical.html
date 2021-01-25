@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeneroMusical</title>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.24.0/firebase-firestore.js"></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/7.24.0/firebase-storage.js"></script>
+    <script src="js/init.js"></script>
+    <script type="module" src="cmp/nav.js"></script>
+    <script type="module" src="cmp/footer.js"></script>
+    <link rel="stylesheet" href="css/estilos.css">
+  </head>
+  <body>
+    <form id="forma">
+      <nav id="MNAv"></nav>
+      <header>
+        <a href="generosmusicales.html">Cancelar</a>
+        <h1>GeneroMusical</h1>
+        <button type="submit">Guardar</button>
+        <button id="eliminar" type="button">Eliminar</button>
+      </header>
+      <p>
+        <label>
+          Nombre
+          <input name="nombre" type="text" value="Cargando…">
+        </label>
+      </p>
+    </form>
+    <footer></footer>
+    <script type="module">
+      import { Factory } from "./js/Factory.js";
+      import { muestraError } from "./lib/util.js";
+      import { InfoGeneroMusical } from "./js/InfoGeneroMusical.js";
+      import { muestraGenerosMusicales, muestraSesión } from "./js/navegacion.js";
+
+      const ctrlSesión = Factory.instancia.ctrlSesión;
+      const ctrlPasatiempos = Factory.instancia.ctrlPasatiempos;
+
+      const params = new URL(location.href).searchParams;
+      const id = params.get("id");
+
+      protege();
+      async function protege() {
+        try {
+          const usuarioAutorizado = await ctrlSesión.protege("GenerosMusicales");
+          MNAv.protege(usuarioAutorizado.privilegios);
+          busca();
+        } catch (error) {
+          muestraError(error)
+          muestraSesión();
+        }
+      }
+
+      async function busca() {
+        try {
+          const modelo = await ctrlGenerosMusicales.busca(id);
+          forma.nombre.value = modelo.nombre;
+          forma.addEventListener("submit", guarda);
+          eliminar.addEventListener("click", elimina);
+        } catch (e) {
+          muestraError(e);
+        }
+      }
+
+      async function guarda(evt) {
+        try {
+          evt.preventDefault();
+          const data = new FormData(forma);
+          const modelo = new InfoGeneroMusical({
+            id,
+            nombre: data.get("nombre")
+          });
+          await ctrlGenerosMusicales.modifica(modelo);
+          muestraGenerosMusicales();
+        } catch (error) {
+          muestraError(error);
+        }
+      }
+
+      async function elimina() {
+        try {
+          if (confirm("Confirmar la eliminación")) {
+            await ctrlGenerosMusicales.elimina(id);
+            muestraGenerosMusicales();
+          }
+        } catch (e) {
+          procesaError(e);
+        }
+      }
+    </script>
+  </body>
+</html>
