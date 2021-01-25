@@ -1,7 +1,7 @@
-class Progreso extends HTMLElement {
+class process extends HTMLElement {
   connectedCallback() {
     this.innerHTML = /* html */
       `<progress max="100">Cargando…</progress>`;
   }
 }
-customElements.define("process", Progreso);
+customElements.define("Progreso", process);
