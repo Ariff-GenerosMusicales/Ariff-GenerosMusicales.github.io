@@ -38,8 +38,6 @@ export class CtrlSesión {
           }
         } else {
           this._auth.signInWithRedirect(this._provider);
-          //auth.signInWithPopup(provider);
-          //auth.signInAnonymously();
         }
       },
         reject);
