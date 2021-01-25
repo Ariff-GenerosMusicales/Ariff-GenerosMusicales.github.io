@@ -1,7 +1,7 @@
 class PFooter extends HTMLElement {
     connectedCallback() {
-        this.innerHTML = /* html */
+        this.innerHTML =
             `Copyright &copy; 2021 Leonardo Ariff Razo Becerra.`;
     }
 }
-customElements.define("footer", PFooter);
+customElements.define("mi-footer", MiFooter);
