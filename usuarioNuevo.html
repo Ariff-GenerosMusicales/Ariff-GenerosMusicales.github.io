@@ -20,7 +20,7 @@
   </head>
   <body>
     <form id="forma">
-      <nav id="MNAv"></nav>
+      <nav id="mnAv"></nav>
       <header>
         <a href="usuarios.html">Cancelar</a>
         <h1>Usuario Nuevo</h1>
@@ -66,7 +66,7 @@
       async function protege() {
         try {
           const usuarioAutorizado = await ctrlSesión.protege("Usuarios");
-          miNav.protege(usuarioAutorizado.privilegios);
+          mnAv.protege(usuarioAutorizado.privilegios);
           forma.addEventListener("submit", guarda);
           ctrlUsuarios.
             foráneas(muestraError, muestraGenerosMusicales, muestraPrivilegios);
