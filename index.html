@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="css/estilos.css">
   </head>
   <body>
-    <nav id="MNAv"></nav>
+    <nav id="mnAv"></nav>
     <header>
       <h1>Sesión</h1>
       <button id=terminarSesión type="button">Salir de la Sesión</button>
@@ -54,7 +54,7 @@
       async function protege() {
         try {
           const usuarioAutorizado = await ctrlSesión.protege("");
-          MNAv.protege(usuarioAutorizado.privilegios);
+          mnAv.protege(usuarioAutorizado.privilegios);
           email.value = usuarioAutorizado.email;
           nombre.value = usuarioAutorizado.nombre;
           avatar.src = usuarioAutorizado.urlFoto;
